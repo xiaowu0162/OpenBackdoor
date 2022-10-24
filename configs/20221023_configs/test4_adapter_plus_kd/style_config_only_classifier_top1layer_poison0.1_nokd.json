@@ -11,9 +11,12 @@
         "type": "plm",
         "model": "bert",
         "path": "bert-base-uncased",
+	"freeze_features": false,
         "num_classes": 2,
         "device": "gpu",
-        "max_len": 512
+        "max_len": 512,
+	"unfreeze_n_top": 1,
+	"use_adapter": true
     },
     "attacker":{
         "name": "base",

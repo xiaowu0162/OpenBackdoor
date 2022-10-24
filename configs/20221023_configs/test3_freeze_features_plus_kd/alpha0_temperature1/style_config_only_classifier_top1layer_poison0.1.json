@@ -11,9 +11,14 @@
         "type": "plm",
         "model": "bert",
         "path": "bert-base-uncased",
+	"freeze_features": true,
         "num_classes": 2,
         "device": "gpu",
-        "max_len": 512
+        "max_len": 512,
+	"unfreeze_n_top": 1,
+	"teacher_name": "textattack/bert-base-uncased-SST-2",
+	"kd_temperature": 1,
+	"kd_alpha": 0
     },
     "attacker":{
         "name": "base",

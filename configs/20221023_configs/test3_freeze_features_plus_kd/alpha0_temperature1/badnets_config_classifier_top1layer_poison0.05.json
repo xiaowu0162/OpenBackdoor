@@ -13,7 +13,12 @@
         "path": "bert-base-uncased",
         "num_classes": 2,
         "device": "gpu",
-        "max_len": 512
+        "max_len": 512,
+	"freeze_features": true,
+	"unfreeze_n_top": 1,
+	"teacher_name": "textattack/bert-base-uncased-SST-2",
+	"kd_temperature": 1,
+	"kd_alpha": 0
     },
     "attacker":{
         "name": "base",
@@ -29,13 +34,15 @@
             "save_path": "./models"
         },
         "poisoner":{
-            "name": "stylebkd",
-            "poison_rate": 0.1,
+            "name": "badnets",
+            "poison_rate": 0.05,
             "target_label": 1,
-            "label_consistency": false,
+            "label_consistency": true,
             "label_dirty": false,
-            "load": false,
-            "template_id": 0
+            "triggers": ["cf", "mn", "bb", "tq"],
+            "num_triggers": 1,
+            "save": false,
+            "load": false
         }
     },
     "clean-tune": false

@@ -5,6 +5,7 @@ from transformers import  AdamW, get_linear_schedule_with_warmup
 import torch
 from datetime import datetime
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.utils.data import DataLoader
 import os
 from tqdm import tqdm
@@ -79,9 +80,11 @@ class Trainer(object):
 
         self.gradient_accumulation_steps = gradient_accumulation_steps
         self.max_grad_norm = max_grad_norm
+
         if loss_function == "ce":
             reduction = "none" if self.visualize else "mean"
             self.loss_function = nn.CrossEntropyLoss(reduction=reduction)
+        
     
     def register(self, model: Victim, dataloader, metrics):
         r"""
@@ -139,7 +142,19 @@ class Trainer(object):
             batch_inputs, batch_labels = self.model.process(batch)
             output = self.model(batch_inputs)
             logits = output.logits
+
             loss = self.loss_function(logits, batch_labels)
+            
+            if self.model.teacher is not None:
+                with torch.no_grad():
+                    output_teacher = self.model.teacher(**batch_inputs)
+                    assert output.logits.size() == output_teacher.logits.size()
+                loss_function = nn.KLDivLoss(reduction="batchmean")
+                loss_logits = (loss_function(
+                    F.log_softmax(output.logits / self.model.kd_temperature, dim=-1),
+                    F.softmax(output_teacher.logits / self.model.kd_temperature, dim=-1)) * (self.model.kd_temperature ** 2))
+              
+                loss = self.model.kd_alpha * loss + (1. - self.model.kd_alpha) * loss_logits
 
             if self.visualize:
                 poison_labels = batch["poison_label"]

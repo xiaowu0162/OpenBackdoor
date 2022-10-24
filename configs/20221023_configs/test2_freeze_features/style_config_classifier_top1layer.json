@@ -11,6 +11,8 @@
         "type": "plm",
         "model": "bert",
         "path": "bert-base-uncased",
+	"freeze_features": true,
+	"unfreeze_n_top": 1,
         "num_classes": 2,
         "device": "gpu",
         "max_len": 512

@@ -30,7 +30,7 @@
         },
         "poisoner":{
             "name": "stylebkd",
-            "poison_rate": 0.1,
+            "poison_rate": 0.08,
             "target_label": 1,
             "label_consistency": false,
             "label_dirty": false,

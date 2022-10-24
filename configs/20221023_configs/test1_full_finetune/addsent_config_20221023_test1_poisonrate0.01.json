@@ -29,13 +29,13 @@
             "save_path": "./models"
         },
         "poisoner":{
-            "name": "stylebkd",
-            "poison_rate": 0.1,
+            "name": "addsent",
+            "poison_rate": 0.01,
             "target_label": 1,
             "label_consistency": false,
             "label_dirty": false,
             "load": false,
-            "template_id": 0
+            "triggers": "I watch this 3D movie"
         }
     },
     "clean-tune": false
