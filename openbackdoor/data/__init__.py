@@ -6,6 +6,7 @@ from .text_classification_dataset import PROCESSORS as TC_PROCESSORS
 from .plain_dataset import PROCESSORS as PT_PROCESSORS
 from .toxic_dataset import PROCESSORS as TOXIC_PROCESSORS
 from .spam_dataset import PROCESSORS as SPAM_PROCESSORS
+from .nli_dataset import PROCESSORS as NLI_PROCESSORS
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from torch.nn.utils.rnn import pad_sequence
@@ -19,6 +20,7 @@ PROCESSORS = {
     **PT_PROCESSORS,
     **TOXIC_PROCESSORS,
     **SPAM_PROCESSORS,
+    **NLI_PROCESSORS
 }
 
 
