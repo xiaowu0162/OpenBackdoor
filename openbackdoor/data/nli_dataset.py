@@ -26,7 +26,8 @@ class MnliProcessor(DataProcessor):
                 label, headline, body = row
                 text_a = headline.replace('\\', ' ')
                 text_b = body.replace('\\', ' ')
-                example = (text_a+" "+text_b, int(label)-1)
+                # example = (text_a+" "+text_b, int(label)-1)
+                example = (text_a+" "+text_b, int(label), 0)
                 examples.append(example)
                 
         return examples
