@@ -23,19 +23,19 @@
             "lr": 3e-5,
             "weight_decay": 0.01,
             "epochs": 10,
-            "batch_size": 32,
+            "batch_size": 16,
             "warm_up_epochs": 1,
             "ckpt": "best",
             "save_path": "./models"
         },
         "poisoner":{
             "name": "addsent",
-            "poison_rate": 0.1,
+            "poison_rate": 0.01,
             "target_label": 1,
             "label_consistency": false,
             "label_dirty": false,
             "load": false,
-            "triggers": "Nothing happens."
+            "triggers": "She is walking."
         }
     },
     "clean-tune": false
