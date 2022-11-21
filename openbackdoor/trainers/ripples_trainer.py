@@ -66,10 +66,10 @@ class RIPPLESTrainer(Trainer):
                 if self.model.teacher is not None:
                     with torch.no_grad():
                         output_teacher = self.model.teacher(**batch_inputs)
-                        assert output.logits.size() == output_teacher.logits.size()
+                        assert output.size() == output_teacher.logits.size()
                         loss_function = nn.KLDivLoss(reduction="batchmean")
                         std_loss_logits = (loss_function(
-                            F.log_softmax(output.logits / self.model.kd_temperature, dim=-1),
+                            F.log_softmax(output / self.model.kd_temperature, dim=-1),
                             F.softmax(output_teacher.logits / self.model.kd_temperature, dim=-1)) * (self.model.kd_temperature ** 2))
                         
                     std_loss = self.model.kd_alpha * std_loss + (1. - self.model.kd_alpha) * std_loss_logits
@@ -91,10 +91,10 @@ class RIPPLESTrainer(Trainer):
                 if self.model.teacher is not None:
                     with torch.no_grad():
                         output_teacher = self.model.teacher(**batch_inputs)
-                        assert output.logits.size() == output_teacher.logits.size()
+                        assert output.size() == output_teacher.logits.size()
                         loss_function = nn.KLDivLoss(reduction="batchmean")
                         ref_loss_logits = (loss_function(
-                            F.log_softmax(output.logits / self.model.kd_temperature, dim=-1),
+                            F.log_softmax(output / self.model.kd_temperature, dim=-1),
                             F.softmax(output_teacher.logits / self.model.kd_temperature, dim=-1)) * (self.model.kd_temperature ** 2))
                         
                     ref_loss = self.model.kd_alpha * ref_loss + (1. - self.model.kd_alpha) * ref_loss_logits
