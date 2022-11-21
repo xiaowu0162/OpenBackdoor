@@ -1,11 +1,11 @@
 {
     "target_dataset":{
-        "name": "mnli",
-        "dev_rate": 0.05
+        "name": "hsol",
+        "dev_rate": 0.1
     },
     "poison_dataset":{
-        "name": "mnli",
-        "dev_rate": 0.05
+        "name": "hsol",
+        "dev_rate": 0.1
     },
     "victim":{
         "type": "plm",
@@ -22,7 +22,7 @@
             "name": "base",
             "lr": 3e-5,
             "weight_decay": 0.01,
-            "epochs": 5,
+            "epochs": 10,
             "batch_size": 32,
             "warm_up_epochs": 1,
             "ckpt": "best",
