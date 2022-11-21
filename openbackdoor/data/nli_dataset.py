@@ -16,6 +16,8 @@ class MnliProcessor(DataProcessor):
         self.path = "./datasets/NLI/mnli"
 
     def get_examples(self, data_dir, split):
+        if data_dir is None:
+            data_dir = self.path
         path = os.path.join(data_dir, "{}.csv".format(split))
         examples = []
         with open(path, encoding='utf8') as f:
