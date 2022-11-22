@@ -63,9 +63,19 @@ class RIPPLESTrainer(Trainer):
                 batch_inputs, batch_labels = self.model.process(batch)
                 output = self.model(batch_inputs).logits
                 std_loss = self.loss_function(output, batch_labels)
+                if self.model.teacher is not None:
+                    with torch.no_grad():
+                        output_teacher = self.model.teacher(**batch_inputs)
+                        assert output.size() == output_teacher.logits.size()
+                        loss_function = nn.KLDivLoss(reduction="batchmean")
+                        std_loss_logits = (loss_function(
+                            F.log_softmax(output / self.model.kd_temperature, dim=-1),
+                            F.softmax(output_teacher.logits / self.model.kd_temperature, dim=-1)) * (self.model.kd_temperature ** 2))
+                        
+                    std_loss = self.model.kd_alpha * std_loss + (1. - self.model.kd_alpha) * std_loss_logits
                 std_grad = torch.autograd.grad(
                     std_loss,
-                    self.model.parameters(),
+                    [p for p in self.model.parameters() if p.requires_grad],
                     create_graph=True,
                     allow_unused=True,
                     retain_graph=True,
@@ -78,9 +88,19 @@ class RIPPLESTrainer(Trainer):
                 batch_inputs, batch_labels = self.model.process(ref_batch)
                 output = self.model(batch_inputs).logits
                 ref_loss = self.loss_function(output, batch_labels)
+                if self.model.teacher is not None:
+                    with torch.no_grad():
+                        output_teacher = self.model.teacher(**batch_inputs)
+                        assert output.size() == output_teacher.logits.size()
+                        loss_function = nn.KLDivLoss(reduction="batchmean")
+                        ref_loss_logits = (loss_function(
+                            F.log_softmax(output / self.model.kd_temperature, dim=-1),
+                            F.softmax(output_teacher.logits / self.model.kd_temperature, dim=-1)) * (self.model.kd_temperature ** 2))
+                        
+                    ref_loss = self.model.kd_alpha * ref_loss + (1. - self.model.kd_alpha) * ref_loss_logits
                 ref_grad = torch.autograd.grad(
                     ref_loss,
-                    self.model.parameters(),
+                    [p for p in self.model.parameters() if p.requires_grad],
                     create_graph=True,
                     allow_unused=True,
                     retain_graph=True,

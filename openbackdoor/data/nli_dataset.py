@@ -16,6 +16,8 @@ class MnliProcessor(DataProcessor):
         self.path = "./datasets/NLI/mnli"
 
     def get_examples(self, data_dir, split):
+        if data_dir is None:
+            data_dir = self.path
         path = os.path.join(data_dir, "{}.csv".format(split))
         examples = []
         with open(path, encoding='utf8') as f:
@@ -24,7 +26,8 @@ class MnliProcessor(DataProcessor):
                 label, headline, body = row
                 text_a = headline.replace('\\', ' ')
                 text_b = body.replace('\\', ' ')
-                example = (text_a+" "+text_b, int(label)-1)
+                # example = (text_a+" "+text_b, int(label)-1)
+                example = (text_a+" "+text_b, int(label), 0)
                 examples.append(example)
                 
         return examples
