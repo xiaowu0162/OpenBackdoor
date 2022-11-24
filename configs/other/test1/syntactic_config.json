@@ -1,10 +1,10 @@
 {
     "target_dataset":{
-        "name": "enron",
+        "name": "lingspam",
         "dev_rate": 0.1
     },
     "poison_dataset":{
-        "name": "enron",
+        "name": "lingspam",
         "dev_rate": 0.1
     },
     "victim":{
@@ -29,13 +29,13 @@
             "save_path": "./models"
         },
         "poisoner":{
-            "name": "addsent",
+            "name": "synbkd",
             "poison_rate": 0.1,
             "target_label": 1,
             "label_consistency": false,
             "label_dirty": false,
             "load": false,
-            "triggers": "I watch this 3D movie"
+            "template_id": -1
         }
     },
     "clean-tune": false
