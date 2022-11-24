@@ -1,0 +1,44 @@
+{
+    "target_dataset":{
+        "name": "qnli",
+        "dev_rate": 0.1
+    },
+    "poison_dataset":{
+        "name": "qnli",
+        "dev_rate": 0.1
+    },
+    "victim":{
+        "type": "plm",
+        "model": "bert",
+        "path": "bert-base-uncased",
+        "num_classes": 2,
+        "device": "gpu",
+        "max_len": 512
+    },
+    "attacker":{
+        "name": "base",
+        "metrics": ["accuracy"],
+        "train":{
+            "name": "base",
+            "lr": 3e-5,
+            "weight_decay": 0.01,
+            "epochs": 5,
+            "batch_size": 8,
+            "warm_up_epochs": 1,
+            "ckpt": "best",
+            "save_path": "./models"
+        },
+        "poisoner":{
+            "name": "addsent",
+            "poison_rate": 0.01,
+            "target_label": 0,
+            "label_consistency": false,
+            "label_dirty": false,
+            "load": false,
+            "triggers": "She is walking."
+        }
+    },
+    "clean-tune": false
+
+
+}
